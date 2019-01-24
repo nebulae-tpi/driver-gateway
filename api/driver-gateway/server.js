@@ -37,6 +37,7 @@ const execute = graphql.execute;
 const subscribe = graphql.subscribe;
 const http = require('http');
 const SubscriptionServer = require('subscriptions-transport-ws').SubscriptionServer;
+const RequireAuthDirective = require('./tools/graphql/directives/requireAuthDirective');
 //This lib is the easiest way to validate through http using express
 const expressJwt = require('express-jwt');
 //This is for validation through websockets
@@ -49,22 +50,26 @@ const typeDefs = gqlSchema.types;
 //graphql resolvers compendium
 const resolvers = gqlSchema.resolvers;
 
+//graphql directives compendium
+const schemaDirectives = { requireAuth: RequireAuthDirective };
 
 //graphql schema = join types & resolvers
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({ typeDefs, resolvers, schemaDirectives });
 
 //Express Server
 const app = express();
 
 const jwtPublicKey = process.env.JWT_PUBLIC_KEY.replace(/\\n/g, '\n');
 
+// This code was commented due to the token validation will be performed with the @requireAuth directive
 // Additional middleware can be mounted at this point to run before Apollo.
-app.use(process.env.GRAPHQL_HTTP_END_POINT, expressJwt({
-    secret: jwtPublicKey,
-    requestProperty: 'authToken',
-    credentialsRequired: true,
-    algorithms: ['RS256']
-}));
+// app.use(process.env.GRAPHQL_HTTP_END_POINT, 
+//     expressJwt({
+//     secret: jwtPublicKey,
+//     requestProperty: 'authToken',
+//     credentialsRequired: true,
+//     algorithms: ['RS256']
+// }));
 
 // Defines GET request that is going to be use by kubelet to identify if the gateway is HEALTHY
 app.get(process.env.GRAPHQL_LIVENESS_HTTP_END_POINT, function (req, res) {
