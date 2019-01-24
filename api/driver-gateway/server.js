@@ -58,7 +58,6 @@ const schema = makeExecutableSchema({ typeDefs, resolvers, schemaDirectives });
 
 //Express Server
 const app = express();
-
 const jwtPublicKey = process.env.JWT_PUBLIC_KEY.replace(/\\n/g, '\n');
 
 // This code was commented due to the token validation will be performed with the @requireAuth directive
