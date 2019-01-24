@@ -1,0 +1,31 @@
+type Token {
+  access_token: String,
+  expires_in: Int,
+  refresh_expires_in: Int,
+  refresh_token: String,
+  token_type: String,  
+  session_state: String,
+  scope: String
+}
+
+type Query{
+   mandatoryQuery: String
+}
+
+type Mutation {
+  createToken(
+    base_url: String!
+    username: String!,
+    password: String!,
+    grant_type: String!,
+    client_id: String!,
+    scope: String!    
+  ): Token
+
+  refreshToken(
+    base_url: String!
+    refresh_token: String!,
+    grand_type: String!,
+    client_id: String!,
+  ): Token
+}
