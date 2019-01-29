@@ -1,4 +1,5 @@
 const { SchemaDirectiveVisitor } = require("apollo-server");
+const { defaultFieldResolver } = require("graphql");
 //This is for Token validation
 const jwt = require('jsonwebtoken');
 
