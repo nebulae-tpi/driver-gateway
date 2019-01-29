@@ -1,0 +1,15 @@
+directive @requireAuth on FIELD_DEFINITION
+
+type BusinessContactInfo {
+  whatsapp: BigInt
+  phone: BigInt
+  zello: String  
+}
+
+"Business Contact info"
+type Query{
+   BusinessContactInfo(
+      "Business id"
+      _id: ID
+   ): BusinessContactInfo @requireAuth
+}
