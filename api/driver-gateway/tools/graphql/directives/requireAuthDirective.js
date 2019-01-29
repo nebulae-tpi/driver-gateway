@@ -1,4 +1,4 @@
-const { SchemaDirectiveVisitor } = require("graphql-tools");
+const { SchemaDirectiveVisitor } = require("apollo-server");
 //This is for Token validation
 const jwt = require('jsonwebtoken');
 

@@ -5,7 +5,9 @@ type Token {
   refresh_token: String,
   token_type: String,  
   session_state: String,
-  scope: String
+  scope: String,
+  error: String,
+  error_description: String,
 }
 
 type Query{
