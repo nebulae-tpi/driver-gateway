@@ -28,7 +28,7 @@ type Mutation {
   refreshToken(
     base_url: String!
     refresh_token: String!,
-    grand_type: String!,
+    grant_type: String!,
     client_id: String!,
   ): Token
 }
