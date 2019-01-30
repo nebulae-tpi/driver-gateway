@@ -22,6 +22,8 @@ type Vehicle {
    plate: String
    "Current blocks"
    blocks: [Block]   
+   "Active flag"
+   active: Boolean
 }
 
 "Driver info"
@@ -34,6 +36,8 @@ type Driver {
    username: String
    "Current blocks"
    blocks: [Block]   
+   "Active flag"
+   active: Boolean
 }
 
 "Driver's shift info"

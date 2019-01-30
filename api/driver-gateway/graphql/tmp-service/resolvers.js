@@ -4,14 +4,15 @@ const request = require('request');
 
 const PICO_Y_PLACA_BLOCK = { key: "PICO_y_PLACA", notes: "", startTime: Date.now() - 60000, endTime: Date.now() + 60000 };
 const vehicles = [
-  { plate: 'DSV006', blocks: [] },
-  { plate: 'MNP137', blocks: [PICO_Y_PLACA_BLOCK] }
+  { plate: 'DSV006', blocks: [], active: true },
+  { plate: 'MNP137', blocks: [PICO_Y_PLACA_BLOCK], active: true }
 ];
 const driver = {
   name: 'Juan Daniel',
   lastname: 'Tobon Santa',
   username: 'juan.tobon@nebulae.com.co',
-  blocks: []
+  blocks: [],
+  active: true
 };
 const shift = {
   state: 'ACTIVE',
