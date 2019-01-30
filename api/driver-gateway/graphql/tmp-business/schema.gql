@@ -1,5 +1,3 @@
-directive @requireAuth on FIELD_DEFINITION
-
 type BusinessContactInfo {
   name: String
   whatsapp: BigInt
