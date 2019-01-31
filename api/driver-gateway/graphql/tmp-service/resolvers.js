@@ -52,7 +52,8 @@ const service = {
   paymentType: 'CASH',
   fareDiscount: 0.10,
   fare: undefined,
-  route: undefined
+  route: undefined,
+  state: "ASSIGNED" 
 };
 
 const commandAck = { accepted: true };

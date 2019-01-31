@@ -106,6 +106,8 @@ type Service{
    fare: BigInt
    "Exact route taken by the driver"
    route: [Point]
+   "current service state"
+   state: String
 }
 
 type Query{
