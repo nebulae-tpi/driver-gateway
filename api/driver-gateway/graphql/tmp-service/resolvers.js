@@ -15,7 +15,7 @@ const driver = {
   active: true
 };
 const shift = {
-  state: 'ACTIVE',
+  state: 'AVAILABLE',
   vehicle: vehicles[0],
   driver
 };
