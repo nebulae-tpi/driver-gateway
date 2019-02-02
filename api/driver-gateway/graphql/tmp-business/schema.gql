@@ -8,8 +8,5 @@ type BusinessContactInfo {
 
 "Business Contact info"
 type Query{
-   BusinessContactInfo(
-      "Business id"
-      _id: ID
-   ): BusinessContactInfo @requireAuth
+   BusinessContactInfo: BusinessContactInfo @requireAuth
 }

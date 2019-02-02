@@ -54,6 +54,10 @@ type Shift {
 type Client {
    "Full name"
    name: String
+   "Tip given to the client. Eg. satellites"
+   tip: BigInt,
+   "Tiping type"
+   tipType: String
 }
 
 "Geo point"
@@ -104,8 +108,10 @@ type Service{
    fareDiscount: Float
    "pre calculated fare"
    fare: BigInt
+   "Tip given to the driver"
+   tip: BigInt
    "Exact route taken by the driver"
-   route: [Point]
+   route: [Point]   
    "current service state"
    state: String
 }

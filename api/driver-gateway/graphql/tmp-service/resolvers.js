@@ -1,6 +1,48 @@
 const { of, Observable, bindNodeCallback } = require('rxjs');
-const { map, tap } = require('rxjs/operators');
+const { map, tap, mapTo } = require('rxjs/operators');
 const request = require('request');
+const mqtt = require('mqtt');
+const mqttClient = mqtt.connect("mqtt://35.222.170.20:1883");
+const uuidv4 = require('uuid/v4');
+
+const senderId = uuidv4();
+const businessId = "2849f777-7ee0-4c0d-b280-9a95fb8277ef";
+
+/**
+     * Publish data throught a topic
+     * Returns an Observable that resolves to the sent message ID
+     * @param {string} topicName 
+     * @param {string} type message(payload) type
+     * @param {Object} data 
+     * @param {Object} ops {correlationId} 
+     */
+const publish$ = (topicName, type, data, { correlationId } = {}) => {
+  const uuid = uuidv4();
+  const dataBuffer = JSON.stringify(
+    {
+      id: uuid,//message id
+      t: type,//Type
+      data,// Payload
+      ts: Date.now(),// Timestamp
+      ets: Date.now() + 5000,// Expiration Timestamp
+      att: {
+        sId: this.senderId, //Sender Id
+        cId: correlationId,// Correlation Id
+        rt: undefined // replyTo Topic
+      }
+    }
+  );
+
+  console.log(`${topicName}`);
+  return of({})
+    .pipe(
+      map(() => {
+        mqttClient.publish(`${topicName}`, dataBuffer, { qos: 0 });
+        return uuid;
+      })
+    );
+}
+
 
 const PICO_Y_PLACA_BLOCK = { key: "PICO_y_PLACA", notes: "", startTime: Date.now() - 60000, endTime: Date.now() + 60000 };
 const vehicles = [
@@ -10,7 +52,7 @@ const vehicles = [
 const driver = {
   name: 'Juan Daniel',
   lastname: 'Tobon Santa',
-  username: 'juan.tobon@nebulae.com.co',
+  username: 'drimax',
   blocks: [],
   active: true
 };
@@ -19,8 +61,11 @@ const shift = {
   vehicle: vehicles[0],
   driver
 };
+
 const client = {
   name: "Daniel Felipe Santa Uribe",
+  tip: 1000,
+  tipType: "ON_SITE"
 };
 const pickUp = {
   marker: [{ lat: 6.2138601, lng: -75.6091695 }],
@@ -52,8 +97,9 @@ const service = {
   paymentType: 'CASH',
   fareDiscount: 0.10,
   fare: undefined,
+  tip: 1000,
   route: undefined,
-  state: "ASSIGNED" 
+  state: "ASSIGNED"
 };
 
 const commandAck = { accepted: true };
@@ -92,24 +138,48 @@ module.exports = {
 
   Mutation: {
     startShift: (root, args, context, info) => {
-      openShift = shift;
-      return of(commandAck).toPromise()
+      openShift = { ...shift };
+      return publish$(
+        `${businessId}/driver-app/shift/${driver.username}`,
+        'ShiftStateChanged',
+        openShift
+      ).pipe(
+        mapTo(commandAck)
+      ).toPromise();
     },
 
     stopShift: (root, args, context, info) => {
       openShift = undefined;
       assignedService = undefined;
-      return of(commandAck).toPromise()
+      return publish$(
+        `${businessId}/driver-app/shift/${driver.username}`,
+        'ShiftStateChanged',
+        { ...shift, state: 'CLOSED' }
+      ).pipe(
+        mapTo(commandAck)
+      ).toPromise();
     },
 
     setShifState: (root, args, context, info) => {
       openShift.state = args.state;
-      return of(commandAck).toPromise()
+      return publish$(
+        `${businessId}/driver-app/shift/${driver.username}`,
+        'ShiftStateChanged',
+        openShift
+      ).pipe(
+        mapTo(commandAck)
+      ).toPromise();
     },
 
     acceptServiceOffer: (root, args, context, info) => {
-      assignedService = service;
-      return of(commandAck).toPromise()
+      assignedService = { ...service };
+      return publish$(
+        `${businessId}/driver-app/service/${driver.username}`,
+        'ServiceAssigned',
+        assignedService
+      ).pipe(
+        mapTo(commandAck)
+      ).toPromise();
     },
 
   },
