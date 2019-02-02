@@ -8,7 +8,7 @@ module.exports = {
     MqttParams: (root, args, context, info) => {
       return of(
         {
-          url: "35.222.170.20",
+          url: "tcp://35.222.170.20",
           port: 1883,
           clientId: context.authToken.preferred_username,
           user: "",
