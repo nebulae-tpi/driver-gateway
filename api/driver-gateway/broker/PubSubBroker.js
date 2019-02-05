@@ -59,10 +59,10 @@ class PubSubBroker {
      * 
      * Returns an Observable that resolves the message response
      */
-    forwardAndGetReply$(topic, type, payload, timeout = this.replyTimeout, ignoreSelfEvents = true, ops) {
+    forwardAndGetReply$(topic, type, payload, timeoutLimit = this.replyTimeout, ignoreSelfEvents = true, ops) {
         return this.forward$(topic, type, payload, ops)
             .pipe(
-                switchMap((messageId) => this.getMessageReply$(messageId, timeout, ignoreSelfEvents))
+                switchMap((messageId) => this.getMessageReply$(messageId, timeoutLimit, ignoreSelfEvents))
             );
     }
 
