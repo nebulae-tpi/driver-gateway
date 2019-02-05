@@ -50,13 +50,13 @@ const vehicles = [
   { plate: 'MNP137', blocks: [PICO_Y_PLACA_BLOCK], active: true }
 ];
 const driver = {
-  name: 'Juan Daniel',
-  lastname: 'Tobon Santa',
+  fullname: 'Juan Daniel Tobon Santa',
   username: 'drimax',
   blocks: [],
   active: true
 };
 const shift = {
+  _id : "23cb8580-a02a-4642-8155-162d4ef57549-1902",
   state: 'AVAILABLE',
   vehicle: vehicles[0],
   driver
@@ -160,7 +160,7 @@ module.exports = {
       ).toPromise();
     },
 
-    setShifState: (root, args, context, info) => {
+    setShiftState: (root, args, context, info) => {
       openShift.state = args.state;
       return publish$(
         `${businessId}/driver-app/shift/${driver.username}`,

@@ -28,10 +28,8 @@ type Vehicle {
 
 "Driver info"
 type Driver {
-   "Driver name"
-   name: String
-   "Driver lastname"
-   lastname: String
+   "Driver fullname"
+   fullname: String
    "username"
    username: String
    "Current blocks"
@@ -42,6 +40,8 @@ type Driver {
 
 "Driver's shift info"
 type Shift {
+   "Shift ID"
+   _id: String
    "shift's state"
    state: String,
    "shift's vehicle"
@@ -141,7 +141,7 @@ type Mutation{
    stopShift: CommandAck @requireAuth
 
    "Sets the shift state"
-   setShifState(
+   setShiftState(
       "state to set"
       state: String
    ): CommandAck @requireAuth
