@@ -31,7 +31,7 @@ spec:
         - name: google-application-credentials
           mountPath: "/etc/GOOGLE_APPLICATION_CREDENTIALS"
           readOnly: true
-        image: nebulaetpi/drivergateway:0.0.36
+        image: nebulaetpi/drivergateway:0.0.37
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -95,6 +95,31 @@ spec:
           value: driver-gateway-materialized-view-updates-driver-gateway
         - name: REPLY_TIMEOUT
           value: '2000'
+        - name: DRIVER_APP_MQTT_DRIVER_URL
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: DRIVER_APP_MQTT_DRIVER_URL
+        - name: DRIVER_APP_MQTT_DRIVER_PORT
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: DRIVER_APP_MQTT_DRIVER_PORT
+        - name: DRIVER_APP_MQTT_DRIVER_CLIENT_ID
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: DRIVER_APP_MQTT_DRIVER_CLIENT_ID
+        - name: DRIVER_APP_MQTT_DRIVER_USER
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: DRIVER_APP_MQTT_DRIVER_USER
+        - name: DRIVER_APP_MQTT_DRIVER_PASSWORD
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: DRIVER_APP_MQTT_DRIVER_PASSWORD
         # JWT CONGIF        
         - name: JWT_PUBLIC_KEY
           value: -----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyGMYfhPX7A5kAaBh9smoyDhj7Ilv0YfsPygnkEUDu44teqPzZhNjoLnAyDED3J7AhGJpOHlSzfC+7jrXXbUVczTP7vhH1pa1RXX4TIhzqo5R9NNKhREK39s6gezsP6SbCfu1XvaT1TVPEPBHho8q3qyICWFtoWTtx1tkk99jFz6zFFeIU2sTVAuf9+q1bawuHY42yU66/iaBP3zEtqLjtl7OO9z8wnIlaHW8zo20taFPeQy5xbmUaVUfEwQ6zoJCcSU2W79r2gFPWSfsXCJ07nfZIl0aWnOV7tRJLkJWsOL6EgFIh3P2v9d/SmLEVpje7kiibVUFqMg7ipRrruMzdwIDAQAB\n-----END PUBLIC KEY-----          
