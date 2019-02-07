@@ -13,5 +13,5 @@ type MqttParams {
 
 "Business Contact info"
 type Query{
-   MqttParams: MqttParams @requireAuth
+   MqttParams: [MqttParams] @requireAuth
 }

@@ -1,6 +1,6 @@
 #!/bin/bash
 export DOCKERHUB_IMAGE=drivergateway
-export DOCKERHUB_TAG=0.0.37
+export DOCKERHUB_TAG=0.0.38
 
 rm -rf deployment/docker/driver-gateway/
 cp -R $API_SHELL_PATH/driver-gateway deployment/docker/driver-gateway
