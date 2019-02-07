@@ -9,6 +9,8 @@ type MqttParams {
   user: String,
   "MQTT connection password"
   password: String,  
+  "order"
+  order: Int
 }
 
 "Business Contact info"
