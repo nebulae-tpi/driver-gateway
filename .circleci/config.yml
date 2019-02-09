@@ -1,5 +1,5 @@
 
-version: 2
+version: 2.1
 jobs:
   build-api:    
     working_directory: /tmp
@@ -60,7 +60,7 @@ jobs:
             command: |
               kubectl apply -f /tmp/workspace/deployment/gke/              
 workflows:
-  version: 2
+  version: 2.1
   build-and-deploy:
     jobs:
       - build-api:
@@ -73,3 +73,20 @@ workflows:
           context: TPI
           requires:
             - build-docker
+      - hold:
+          type: approval
+      - build-api:
+          context: TPI_PROD
+          name: build-api-prod
+          requires:
+            - hold
+      - build-docker:
+          context: TPI_PROD
+          name: build-docker-prod
+          requires:
+            - build-api-prod
+            - hold
+      - deploy-dev:
+          context: TPI_PROD
+          requires:
+            - build-docker-prod
