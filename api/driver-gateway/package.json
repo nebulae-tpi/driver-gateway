@@ -1,6 +1,6 @@
 {
   "name": "@nebulaengineering/driver-gateway",
-  "version": "0.0.1",
+  "version": "0.0.40",
   "description": "Microservices DRIVER API Gateway",
   "main": "server.js",
   "scripts": {
