@@ -88,5 +88,6 @@ workflows:
             - hold
       - deploy-dev:
           context: TPI_PROD
+          name: deploy-dev-prod
           requires:
             - build-docker-prod
