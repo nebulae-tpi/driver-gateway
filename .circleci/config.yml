@@ -59,7 +59,7 @@ jobs:
             name: Deploy on Kubernetes
             command: |
               test "$ENVIRONMENT" = "prod" && for xi in $(ls /tmp/workspace/deployment/gke/*.y*ml); do sed -i s/nebulaetpi/nebulaetpiprod/ $xi ; done
-	      kubectl apply -f /tmp/workspace/deployment/gke/
+              kubectl apply -f /tmp/workspace/deployment/gke/
 workflows:
   version: 2.1
   build-and-deploy:
