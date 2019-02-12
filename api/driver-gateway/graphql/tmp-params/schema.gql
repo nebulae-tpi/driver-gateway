@@ -13,7 +13,13 @@ type MqttParams {
   order: Int
 }
 
+type GoogleMapsParams {
+  googleMapsAndroidKey: String,
+  googleMapsBrowserKey: String
+}
+
 "Business Contact info"
 type Query{
    MqttParams: [MqttParams] @requireAuth
+   GoogleMapsParams: GoogleMapsParams @requireAuth
 }

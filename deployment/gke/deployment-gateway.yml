@@ -31,7 +31,7 @@ spec:
         - name: google-application-credentials
           mountPath: "/etc/GOOGLE_APPLICATION_CREDENTIALS"
           readOnly: true
-        image: nebulaetpi/drivergateway:0.0.40
+        image: nebulaetpi/drivergateway:0.0.41
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -120,6 +120,16 @@ spec:
            secretKeyRef:
              name: driver-app-link
              key: DRIVER_APP_MQTT_DRIVER_PASSWORD
+        - name: GOOGLE_MAPS_ANDROID_KEY
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: GOOGLE_MAPS_ANDROID_KEY
+        - name: GOOGLE_MAPS_BROWSER_KEY
+          valueFrom:
+           secretKeyRef:
+             name: driver-app-link
+             key: GOOGLE_MAPS_BROWSER_KEY
         # JWT CONGIF        
         - name: JWT_PUBLIC_KEY
           valueFrom:

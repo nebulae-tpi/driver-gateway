@@ -8,6 +8,7 @@ const request = require('request');
 module.exports = {
 
   Query: {
+
     MqttParams: (root, args, context, info) => {
       const mqttParamsCount = process.env.DRIVER_APP_MQTT_DRIVER_URL.split(';').length;
       let i;
@@ -25,6 +26,14 @@ module.exports = {
         );
       }
       return of(params).toPromise()
+    },
+
+
+    GoogleMapsParams: (root, args, context, info) => {
+      return of({
+        googleMapsAndroidKey: process.env.GOOGLE_MAPS_ANDROID_KEY,
+        googleMapsBrowserKey: process.env.GOOGLE_MAPS_BROWSER_KEY
+      }).toPromise()
     },
   },
 }
