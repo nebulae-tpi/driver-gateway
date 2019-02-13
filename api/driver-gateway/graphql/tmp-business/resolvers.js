@@ -9,8 +9,8 @@ module.exports = {
       return of(
         {
           name: 'NebulaE',
-          whatsapp: 573015033132,
-          phone: 3015033132,
+          whatsapp: 573177020687,
+          phone: 3177020687,
           zello: 'zello://nyc?add_channel',
           defaultLocation: '6.164863, -75.601650'
         }
