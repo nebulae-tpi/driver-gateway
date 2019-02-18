@@ -41,8 +41,8 @@ jobs:
             export API_SHELL_PATH=/tmp/
             cd /tmp/repo
             sh /tmp/repo/deployment/docker/build-docker-hub.sh
-          deploy-dev:
-              working_directory: /tmp/workspace
+    deploy-dev:
+      working_directory: /tmp/workspace
       docker:
         - image: google/cloud-sdk:latest
       steps:
