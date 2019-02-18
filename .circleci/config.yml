@@ -58,8 +58,7 @@ jobs:
         - run:
             name: Deploy on Kubernetes
             command: |
-              test "$ENVIRONMENT" = "prod" && for xi in $(ls /tmp/workspace/deployment/gke/*.y*ml); do sed -i s/nebulaetpi/nebulaetpiprod/ $xi ; done
-              for xi in $(ls /tmp/workspace/deployment/gke/*.y*ml); do sed -i s/nebulae-tpi-229423/$GKE_PROJECT_DEV/ $xi ; done
+              for xi in $(ls ~/nebulae/repo/deployment/gke/*.y*ml); do sed -i s/DOCKERHUB/$DOCKERHUB_NAMESPACE/ $xi ; done
               kubectl apply -f /tmp/workspace/deployment/gke/
 workflows:
   version: 2.1
@@ -67,29 +66,48 @@ workflows:
     jobs:
       - build-api:
           context: TPI
+          filters:
+            branches:
+              only:
+                - develop
       - build-docker:
           context: TPI
           requires:
             - build-api
+          filters:
+            branches:
+              only:
+                - develop
       - deploy-dev:
           context: TPI
           requires:
             - build-docker
-      - hold:
-          type: approval
+          filters:
+            branches:
+              only:
+                - develop
       - build-api:
           context: TPI_PROD
           name: build-api-prod
-          requires:
-            - hold
+          filters:
+            branches:
+              only:
+                - master
       - build-docker:
           context: TPI_PROD
           name: build-docker-prod
           requires:
             - build-api-prod
-            - hold
+          filters:
+            branches:
+              only:
+                - master
       - deploy-dev:
           context: TPI_PROD
           name: deploy-dev-prod
           requires:
             - build-docker-prod
+          filters:
+            branches:
+              only:
+                - master
