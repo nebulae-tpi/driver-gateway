@@ -41,13 +41,13 @@ jobs:
             export API_SHELL_PATH=/tmp/
             cd /tmp/repo
             sh /tmp/repo/deployment/docker/build-docker-hub.sh
-    deploy-dev:
-      working_directory: /tmp/workspace
-      docker:
-        - image: google/cloud-sdk:latest
-      steps:
-        - checkout
-        - run:
+  deploy-dev:
+    working_directory: /tmp/workspace
+    docker:
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - run:
             name: Setup gcloud & kubectl
             command: |
               echo $GCP_SERVICE_ACCOUNT_DEV | base64 --decode --ignore-garbage > /root/gcloud-service-key.json
@@ -55,7 +55,7 @@ jobs:
               gcloud --quiet config set project $GKE_PROJECT_DEV
               gcloud --quiet config set compute/zone $GKE_ZONE_DEV
               gcloud --quiet container clusters get-credentials $GKE_CLUSTER
-        - run:
+      - run:
             name: Deploy on Kubernetes
             command: |
               for xi in $(ls /tmp/workspace/deployment/gke/*.y*ml); do sed -i s/DOCKERHUB/$DOCKERHUB_NAMESPACE/ $xi ; done
