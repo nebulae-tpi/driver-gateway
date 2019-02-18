@@ -41,8 +41,8 @@ jobs:
             export API_SHELL_PATH=/tmp/
             cd /tmp/repo
             sh /tmp/repo/deployment/docker/build-docker-hub.sh
-  deploy-dev:
-      working_directory: /tmp/workspace
+          deploy-dev:
+              working_directory: /tmp/workspace
       docker:
         - image: google/cloud-sdk:latest
       steps:
@@ -58,7 +58,7 @@ jobs:
         - run:
             name: Deploy on Kubernetes
             command: |
-              for xi in $(ls ~/nebulae/repo/deployment/gke/*.y*ml); do sed -i s/DOCKERHUB/$DOCKERHUB_NAMESPACE/ $xi ; done
+              for xi in $(ls ~/tmp/workspace/deployment/gke/*.y*ml); do sed -i s/DOCKERHUB/$DOCKERHUB_NAMESPACE/ $xi ; done
               kubectl apply -f /tmp/workspace/deployment/gke/
 workflows:
   version: 2.1
