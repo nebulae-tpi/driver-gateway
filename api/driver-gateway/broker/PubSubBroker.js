@@ -1,7 +1,7 @@
 'use strict'
 
-const { map, switchMap, filter, first, timeout, mergeMap, tap} = require('rxjs/operators');
-const { Subject, of, from, defer } = require('rxjs');
+const { map, switchMap, filter, first, timeout, mergeMap, tap } = require('rxjs/operators');
+const { Subject, of, from, defer, ReplaySubject } = require('rxjs');
 const uuidv4 = require('uuid/v4');
 
 class PubSubBroker {
@@ -19,7 +19,7 @@ class PubSubBroker {
         /**
          * Rx Subject for every message reply
          */
-        this.replies$ = new Subject();
+        this.replies$ = new ReplaySubject(20);
         this.senderId = uuidv4();
         /**
          * Map of verified topics
@@ -43,9 +43,9 @@ class PubSubBroker {
      */
     forward$(topic, type, payload, ops = {}) {
         return this.getTopic$(topic)
-        .pipe(
-            switchMap(topic => this.publish$(topic.name, type, payload, ops))
-        );            
+            .pipe(
+                switchMap(topic => this.publish$(topic.name, type, payload, ops))
+            );
     }
 
     /**
@@ -76,17 +76,17 @@ class PubSubBroker {
     getMessageReply$(correlationId, timeoutLimit = this.replyTimeout, ignoreSelfEvents = true) {
         //console.log('getMessageReply$ => data: ', new Date());
         return this.replies$
-        .pipe(
-            filter(msg => msg),
-            filter(msg => msg.topic === this.gatewayRepliesTopic),
-            filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId),
-            //.do(msg => console.log("msg.correlationId => ",msg.correlationId, " Correlation => ", correlationId))
-            filter(msg => msg && msg.correlationId === correlationId),
-            map(msg => msg.data),
-            timeout(timeoutLimit),
-            first()
+            .pipe(
+                filter(msg => msg),
+                filter(msg => msg.topic === this.gatewayRepliesTopic),
+                filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId),
+                //.do(msg => console.log("msg.correlationId => ",msg.correlationId, " Correlation => ", correlationId))
+                filter(msg => msg && msg.correlationId === correlationId),
+                map(msg => msg.data),
+                timeout(timeoutLimit),
+                first()
 
-        );            
+            );
     }
 
     /**
@@ -96,13 +96,13 @@ class PubSubBroker {
      */
     getEvents$(types, ignoreSelfEvents = true) {
         return this.replies$
-        .pipe(
-            filter(msg => msg),
-            filter(msg => msg.topic === this.gatewayEventsTopic),
-            filter(msg => types ? types.indexOf(msg.type) !== -1 : true),
-            filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId)
-        );
-       }
+            .pipe(
+                filter(msg => msg),
+                filter(msg => msg.topic === this.gatewayEventsTopic),
+                filter(msg => types ? types.indexOf(msg.type) !== -1 : true),
+                filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId)
+            );
+    }
 
     /**
      * Publish data throught a topic
@@ -119,15 +119,15 @@ class PubSubBroker {
             .pipe(
                 mergeMap(topic =>
                     // Observable.fromPromise(
-                        defer(() => topic.publisher().publish(dataBuffer,
-                            {
-                                senderId: this.senderId,
-                                correlationId,
-                                type,
-                                replyTo: this.gatewayRepliesTopic
-                            })
-                        )
-                        
+                    defer(() => topic.publisher().publish(dataBuffer,
+                        {
+                            senderId: this.senderId,
+                            correlationId,
+                            type,
+                            replyTo: this.gatewayRepliesTopic
+                        })
+                    )
+
                     // )
                 ),
                 //tap(messageId => console.log(`Message published through ${topicName}, MessageId=${messageId}`, new Date()))
@@ -143,12 +143,12 @@ class PubSubBroker {
     getMaterializedViewsUpdates$(types, ignoreSelfEvents = true) {
         //console.log('getMaterializedViewsUpdates$1 ', types);
         return this.replies$
-        .pipe(
-            filter(msg => msg),
-            filter(msg => msg.topic === this.materializedViewTopic),
-            filter(msg => types ? types.indexOf(msg.type) !== -1 : true),
-            filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId)
-        )            
+            .pipe(
+                filter(msg => msg),
+                filter(msg => msg.topic === this.materializedViewTopic),
+                filter(msg => types ? types.indexOf(msg.type) !== -1 : true),
+                filter(msg => !ignoreSelfEvents || msg.attributes.senderId !== this.senderId)
+            )
     }
 
 
@@ -164,20 +164,20 @@ class PubSubBroker {
             //if not cached, then tries to know if the topic exists
             const topic = this.pubsubClient.topic(topicName);
             return defer(() => topic.exists())
-            .pipe(
-                map(data => data[0]),
-                switchMap(exists => {
-                    if (exists) {
-                        //if it does exists, then store it on the cache and return it
-                        this.verifiedTopics[topicName] = topic;
-                        console.log(`Topic ${topicName} already existed and has been set into the cache`);
-                        return of(topic);
-                    } else {
-                        //if it does NOT exists, then create it, store it in the cache and return it
-                        return this.createTopic$(topicName);
-                    }
-                })
-            );
+                .pipe(
+                    map(data => data[0]),
+                    switchMap(exists => {
+                        if (exists) {
+                            //if it does exists, then store it on the cache and return it
+                            this.verifiedTopics[topicName] = topic;
+                            console.log(`Topic ${topicName} already existed and has been set into the cache`);
+                            return of(topic);
+                        } else {
+                            //if it does NOT exists, then create it, store it in the cache and return it
+                            return this.createTopic$(topicName);
+                        }
+                    })
+                );
         }
         //return cached topic
         return of(cachedTopic);
@@ -189,13 +189,13 @@ class PubSubBroker {
      */
     createTopic$(topicName) {
         return defer(() => this.pubsubClient.createTopic(topicName))
-        .pipe(
-            switchMap(() => {
-                this.verifiedTopics[topicName] = this.pubsubClient.topic(topicName);
-                console.log(`Topic ${topicName} have been created and set into the cache`);
-                return of(this.verifiedTopics[topicName]);                
-            } )
-        );
+            .pipe(
+                switchMap(() => {
+                    this.verifiedTopics[topicName] = this.pubsubClient.topic(topicName);
+                    console.log(`Topic ${topicName} have been created and set into the cache`);
+                    return of(this.verifiedTopics[topicName]);
+                })
+            );
     }
 
 
@@ -223,41 +223,41 @@ class PubSubBroker {
      */
     startMessageListener() {
         of({})
-        .pipe(
-            mergeMap(() => from([
-                { topicName: this.gatewayRepliesTopic, topicSubscriptionName: this.gatewayRepliesTopicSubscription },
-                { topicName: this.gatewayEventsTopic, topicSubscriptionName: this.gatewayEventsTopicSubscription },
-                { topicName: this.materializedViewTopic, topicSubscriptionName: this.materializedViewTopicSubscription }
-            ])),
-            mergeMap( ({ topicName, topicSubscriptionName }) => this.getSubscription$(topicName, topicSubscriptionName) )
-        )
-        .subscribe(
-            ({ subscription, topicName, subscriptionName }) => {
-                subscription.on(`message`, message => {
-                    //console.log('Received message', new Date(), topicName, message.attributes.correlationId, JSON.parse(message.data));
-                    this.replies$.next(
-                        {
-                            topic: topicName,
-                            id: message.id,
-                            type: message.attributes.type,
-                            data: JSON.parse(message.data),
-                            attributes: message.attributes,
-                            correlationId: message.attributes.correlationId
-                        }
-                    );
-                    message.ack();
-                    //console.log('****** ACK MESSAGE ', message.attributes.correlationId);
-                });
-                console.log(`PubSubBroker is listening to ${topicName} under the subscription ${subscriptionName}`);
-            },
-            (err) => {
-                console.error(`Failed to obtain subscription `, err);
-            },
-            () => {
-                //console.log('GatewayReplies listener has completed!');
-            }
-        );     
-            
+            .pipe(
+                mergeMap(() => from([
+                    { topicName: this.gatewayRepliesTopic, topicSubscriptionName: this.gatewayRepliesTopicSubscription },
+                    { topicName: this.gatewayEventsTopic, topicSubscriptionName: this.gatewayEventsTopicSubscription },
+                    { topicName: this.materializedViewTopic, topicSubscriptionName: this.materializedViewTopicSubscription }
+                ])),
+                mergeMap(({ topicName, topicSubscriptionName }) => this.getSubscription$(topicName, topicSubscriptionName))
+            )
+            .subscribe(
+                ({ subscription, topicName, subscriptionName }) => {
+                    subscription.on(`message`, message => {
+                        //console.log('Received message', new Date(), topicName, message.attributes.correlationId, JSON.parse(message.data));
+                        this.replies$.next(
+                            {
+                                topic: topicName,
+                                id: message.id,
+                                type: message.attributes.type,
+                                data: JSON.parse(message.data),
+                                attributes: message.attributes,
+                                correlationId: message.attributes.correlationId
+                            }
+                        );
+                        message.ack();
+                        //console.log('****** ACK MESSAGE ', message.attributes.correlationId);
+                    });
+                    console.log(`PubSubBroker is listening to ${topicName} under the subscription ${subscriptionName}`);
+                },
+                (err) => {
+                    console.error(`Failed to obtain subscription `, err);
+                },
+                () => {
+                    //console.log('GatewayReplies listener has completed!');
+                }
+            );
+
     }
 
     /**
