@@ -30,6 +30,11 @@ const buildGoogleMapsParams = () => {
   };
 }
 
+const buildPredefinedMessages = () => {  
+  const predefinedMessages = JSON.parse(process.env.PREDEFINED_MESSAGES_DRIVER);
+  return predefinedMessages.messages;
+}
+
 
 module.exports = {
 
@@ -54,6 +59,11 @@ module.exports = {
         MqttParams: buildMqttParams(context)
       }).toPromise()
     },
+
+    PredefinedMessages: (root, args, context, info) => {
+      return of(buildPredefinedMessages())
+      .toPromise()
+    }
 
   },
 }

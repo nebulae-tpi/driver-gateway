@@ -18,14 +18,27 @@ type GoogleMapsParams {
   googleMapsBrowserKey: String
 }
 
-type Params{
+type Params {
    MqttParams: [MqttParams]
    GoogleMapsParams: GoogleMapsParams
 }
 
+type ClientMessageTranslation {
+  es: String
+  en: String
+}
+
+type PredefinedMessages {
+  "Predefined message code"
+  code: String!
+  type: String!
+  translation: ClientMessageTranslation
+}
+
 "Business Contact info"
-type Query{
+type Query {
    Params: Params @requireAuth
    MqttParams: [MqttParams] @requireAuth
-   GoogleMapsParams: GoogleMapsParams @requireAuth  
+   GoogleMapsParams: GoogleMapsParams @requireAuth
+   PredefinedMessages: [PredefinedMessages] @requireAuth
 }

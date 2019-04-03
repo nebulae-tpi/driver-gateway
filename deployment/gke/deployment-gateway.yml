@@ -31,7 +31,7 @@ spec:
         - name: google-application-credentials
           mountPath: "/etc/GOOGLE_APPLICATION_CREDENTIALS"
           readOnly: true
-        image: DOCKERHUB/drivergateway:0.1.0
+        image: DOCKERHUB/drivergateway:0.1.1
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
@@ -134,7 +134,9 @@ spec:
            secretKeyRef:
              name: driver-app-link
              key: GOOGLE_MAPS_BROWSER_KEY
-        # JWT CONGIF        
+        - name: PREDEFINED_MESSAGES_DRIVER
+          value: '{"messages":[{"code":1,"translation":{"es":"Estoy esperando","en":"I am waiting."},"type":"DRIVER"},{"code":2,"translation":{"es":"Estoy en camino","en":"I am on my way"},"type":"DRIVER"},{"code":3,"translation":{"es":"Esperame por 5 min.","en":"Wait for me for 5 min."},"type":"DRIVER"},{"code":4,"translation":{"es":"OK","en":"OK"},"type":"DRIVER"}]}'
+        # JWT CONFIG        
         - name: JWT_PUBLIC_KEY
           valueFrom:
             configMapKeyRef:
