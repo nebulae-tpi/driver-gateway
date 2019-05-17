@@ -19,6 +19,7 @@ kind: StatefulSet
 metadata:
   name: api-driver-gateway
 spec:
+  serviceName: "api-driver-gateway"
   replicas: 2
   template:
     metadata:
