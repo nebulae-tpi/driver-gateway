@@ -15,11 +15,11 @@ spec:
     run: api-driver-gateway
 ---
 apiVersion: extensions/v1beta1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: api-driver-gateway
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:

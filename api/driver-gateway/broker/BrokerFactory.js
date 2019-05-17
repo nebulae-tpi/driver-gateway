@@ -1,5 +1,7 @@
 'use strict';
 
+const os = require("os");
+
 let instance = null;
 class BrokerFactory {
   constructor() {
@@ -13,7 +15,7 @@ class BrokerFactory {
         this.broker = new PubSubBroker({
           replyTimeOut: process.env.REPLY_TIMEOUT || 2000,
           projectId: process.env.GCLOUD_PROJECT_ID,
-          gatewayRepliesTopic: process.env.GATEWAY_REPLIES_TOPIC,
+          gatewayRepliesTopic: `${process.env.GATEWAY_REPLIES_TOPIC}_${os.hostname()}`,
           gatewayRepliesTopicSubscription: process.env.GATEWAY_REPLIES_TOPIC_SUBSCRIPTION,
           gatewayEventsTopic: process.env.GATEWAY_EVENTS_TOPIC,
           gatewayEventsTopicSubscription: process.env.GATEWAY_EVENTS_TOPIC_SUBSCRIPTION,
