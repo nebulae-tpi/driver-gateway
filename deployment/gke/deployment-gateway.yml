@@ -26,6 +26,8 @@ spec:
       labels:
         run: api-driver-gateway
     spec:
+      updateStrategy:
+        type: RollingUpdate
       containers:
       - name: api-driver-gateway
         volumeMounts:
