@@ -21,13 +21,13 @@ metadata:
 spec:
   serviceName: "api-driver-gateway"
   replicas: 2
+  updateStrategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
         run: api-driver-gateway
     spec:
-      updateStrategy:
-        type: RollingUpdate
       containers:
       - name: api-driver-gateway
         volumeMounts:
