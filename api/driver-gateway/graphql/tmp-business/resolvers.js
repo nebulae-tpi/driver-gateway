@@ -26,6 +26,7 @@ module.exports = {
   Query: {
     BusinessContactInfo: (root, args, context, info) => {
       const business = BUSINESS_UNIT_LIST.find(bu => bu._id === context.authToken.businessId );
+      console.log('Business found => ', business);
       return of(business).toPromise()
     },
   },
