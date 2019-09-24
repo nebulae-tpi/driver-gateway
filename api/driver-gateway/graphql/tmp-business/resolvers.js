@@ -6,6 +6,9 @@ module.exports = {
 
   Query: {
     BusinessContactInfo: (root, args, context, info) => {
+      console.log('AuthToken.businessId ==> ', context.authToken.businessId );
+      
+
       return of(
         {
           name: 'NebulaE',
