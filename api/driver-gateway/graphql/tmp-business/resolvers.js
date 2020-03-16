@@ -7,8 +7,8 @@ const BUSINESS_UNIT_LIST = [
   {
     _id: '75cafa6d-0f27-44be-aa27-c2c82807742d',
     name: 'TxPluz Cali',
-    whatsapp: 573004832728,
-    phone: 3004832728,
+    whatsapp: 573108942249,
+    phone: 3108942249,
     zello: 'zello://nyc?add_channel',
     defaultLocation: '6.164863, -75.601650'
   },
