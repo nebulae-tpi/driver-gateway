@@ -3,6 +3,7 @@ const { map, tap } = require('rxjs/operators');
 const request = require('request');
 
 
+
 const buildMqttParams = (context) => {
   const mqttParamsCount = process.env.DRIVER_APP_MQTT_DRIVER_URL.split(';').length;
   let i;
@@ -33,6 +34,7 @@ const buildPredefinedMessages = () => {
   const predefinedMessages = JSON.parse(process.env.PREDEFINED_MESSAGES_DRIVER);
   return predefinedMessages.messages;
 }
+
 
 
 module.exports = {
