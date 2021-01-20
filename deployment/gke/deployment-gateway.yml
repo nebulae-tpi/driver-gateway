@@ -19,7 +19,7 @@ kind: StatefulSet
 metadata:
   name: api-driver-gateway
 spec:
-  serviceName: "api-driver-gateway"
+  serviceName: api-driver-gateway
   replicas: 2
   updateStrategy:
     type: RollingUpdate
