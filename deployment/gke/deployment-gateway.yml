@@ -12,6 +12,8 @@ spec:
     protocol: TCP
     name: http-ws
   selector:
+    matchLabels:
+      app: api-driver-gateway
     run: api-driver-gateway
 ---
 apiVersion: apps/v1
@@ -34,7 +36,7 @@ spec:
         - name: google-application-credentials
           mountPath: "/etc/GOOGLE_APPLICATION_CREDENTIALS"
           readOnly: true
-        image: DOCKERHUB/drivergateway:0.3.1
+        image: DOCKERHUB/drivergateway:0.3.2
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
