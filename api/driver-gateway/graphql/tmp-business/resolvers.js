@@ -1,6 +1,7 @@
 const { of, Observable, bindNodeCallback } = require('rxjs');
 const { map, tap } = require('rxjs/operators');
 const request = require('request');
+const broker = require("../../broker/BrokerFactory")();
 
 
 const BUSINESS_UNIT_LIST = [
@@ -26,9 +27,17 @@ module.exports = {
 
   Query: {
     BusinessContactInfo: (root, args, context, info) => {
-      const business = BUSINESS_UNIT_LIST.find(bu => bu._id === context.authToken.businessId );
-      // console.log('Business found => ', business);
-      return of(business).toPromise();
+      const business = BUSINESS_UNIT_LIST.find(bu => bu._id === context.authToken.businessId);
+      if (context.authToken.businessId === "bf2807e4-e97f-43eb-b15d-09c2aff8b2ab") {
+        // console.log('Business found => ', business);
+        return broker.forwardAndGetReply$("Business", "drivergateway.graphql.query.BusinessAttributes", { root, args, jwt: context.encodedToken }, 2000).pipe(
+          map(response => {
+            return { ...business, attributes: (response.data || {}).attributes }
+          })
+        ).toPromise();
+      }else {
+        return of(business).toPromise();
+      }
     },
   },
 }
