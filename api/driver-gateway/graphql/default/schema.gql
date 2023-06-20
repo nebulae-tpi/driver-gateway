@@ -1,2 +1,3 @@
 directive @requireAuth on FIELD_DEFINITION
 scalar BigInt
+scalar JSON
