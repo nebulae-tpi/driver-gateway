@@ -3,6 +3,7 @@ type BusinessContactInfo {
   whatsapp: BigInt
   phone: BigInt
   zello: String
+  attributes: JSON
   defaultLocation: String    
 }
 
