@@ -31,7 +31,7 @@ module.exports = {
       if (context.authToken.businessId === "bf2807e4-e97f-43eb-b15d-09c2aff8b2ab") {
         return broker.forwardAndGetReply$("Business", "drivergateway.graphql.query.BusinessAttributes", { root, args, jwt: context.encodedToken }, 2000).pipe(
           map(response => {
-            console.log('Business found ===> ', response.data); 
+            console.log('Business found ===> ', JSON.stringify(response)); 
             return { ...business, attributes: (response.data || {}).attributes }
           })
         ).toPromise();
