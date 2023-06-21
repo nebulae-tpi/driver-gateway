@@ -21,7 +21,7 @@ const BUSINESS_UNIT_LIST = [
     zello: 'zello://nyc?add_channel',
     defaultLocation: '5.067, -75.511688'
   }
-] 
+]  
 
 module.exports = {
 
