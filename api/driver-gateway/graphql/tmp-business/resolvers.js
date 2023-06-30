@@ -20,6 +20,14 @@ const BUSINESS_UNIT_LIST = [
     phone: 3003546569,
     zello: 'zello://nyc?add_channel',
     defaultLocation: '5.067, -75.511688'
+  },
+  {
+    _id: '2af56175-227e-40e7-97ab-84e8fa9e12ce',
+    name: 'Free Driver',
+    whatsapp: 573003546569,
+    phone: 3003546569,
+    zello: 'zello://nyc?add_channel',
+    defaultLocation: '6.164863, -75.601650'
   }
 ]   
 
