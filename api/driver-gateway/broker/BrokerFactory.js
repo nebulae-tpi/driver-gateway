@@ -10,7 +10,7 @@ class BrokerFactory {
 
     switch (BROKER_TYPE) {
       case 'PUBSUB':
-
+ 
         const PubSubBroker = require('./PubSubBroker');
         this.broker = new PubSubBroker({
           replyTimeOut: process.env.REPLY_TIMEOUT || 2000,
