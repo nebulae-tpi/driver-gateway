@@ -37,7 +37,7 @@ spec:
         - name: google-application-credentials
           mountPath: "/etc/GOOGLE_APPLICATION_CREDENTIALS"
           readOnly: true
-        image: DOCKERHUB/drivergateway:0.3.15
+        image: DOCKERHUB/drivergateway:0.3.16
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
