@@ -28,7 +28,15 @@ const BUSINESS_UNIT_LIST = [
     phone: 3042877747,
     zello: 'zello://nyc?add_channel',
     defaultLocation: '6.164863, -75.601650'
-  }
+  },
+  {
+    _id: '7d95f8ef-4c54-466a-8af9-6dd197dd920a',
+    name: 'TxPlus Bogota',
+    whatsapp: 573112328086,
+    phone: 3112328086,
+    zello: 'zello://nyc?add_channel',
+    defaultLocation: '4.666024, -74.111783'
+  },
 ]   
 
 module.exports = {
