@@ -37,6 +37,14 @@ const BUSINESS_UNIT_LIST = [
     zello: 'zello://nyc?add_channel',
     defaultLocation: '4.666024, -74.111783'
   },
+  {
+    _id: 'ec600f7f-1b57-4c47-af77-c6750a8649bd',
+    name: 'Villavicencio',
+    whatsapp: 573114485469,
+    phone: 3114485469,
+    zello: 'zello://nyc?add_channel',
+    defaultLocation: '4.133937, -73.636462'
+  },
 ]   
 
 module.exports = {
