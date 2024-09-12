@@ -15,7 +15,7 @@ const BUSINESS_UNIT_LIST = [
   },
   {
     _id: 'b19c067e-57b4-468f-b970-d0101a31cacb',
-    name: 'TxPlus Manizales',
+    name: 'Zona Cafetera',
     whatsapp: 573042979304,
     phone: 3042979304,
     zello: 'zello://nyc?add_channel',
