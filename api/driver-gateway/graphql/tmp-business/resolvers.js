@@ -16,8 +16,8 @@ const BUSINESS_UNIT_LIST = [
   {
     _id: 'b19c067e-57b4-468f-b970-d0101a31cacb',
     name: 'TxPlus Manizales',
-    whatsapp: 573003546569,
-    phone: 3003546569,
+    whatsapp: 573042979304,
+    phone: 3042979304,
     zello: 'zello://nyc?add_channel',
     defaultLocation: '5.067, -75.511688'
   },
